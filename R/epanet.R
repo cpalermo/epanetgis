@@ -5,5 +5,6 @@
 #   Test Package:              'Ctrl + Shift + T'
 
 en_open <- function() {
-  epanet2toolkit::getOpenflag()
+  res <- epanet2toolkit::getOpenflag()
+  return(res)
 }
