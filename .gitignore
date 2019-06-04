@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+# Emacs backups & auto save files
+*~
+\#*\#
+.\#*
+

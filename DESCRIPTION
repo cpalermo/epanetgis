@@ -1,0 +1,17 @@
+Package: epanetgis
+Type: Package
+Title: Connect GIS to EPANET
+Version: 0.0.0.9000
+Author: Carlo Palermo <carlo.palermo@hdati.com>
+Maintainer: Carlo Palermo <carlo.palermo@hdati.com>
+Description: A collection of functions to write EPANET .inp files
+    from different GIS sources.
+Depends:
+    R (>= 3.4.0)
+Imports:
+    sf,
+    epanetReader,
+    epanet2toolkit
+License: file LICENSE
+Encoding: UTF-8
+LazyData: true
