@@ -1,9 +1,9 @@
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Install Package:           'Ctrl + Shift + B'
-#   Check Package:             'Ctrl + Shift + E'
-#   Test Package:              'Ctrl + Shift + T'
-
+#' Check EPANET session
+#'
+#' @examples
+#' en_open()
+#'
+#' @export
 en_open <- function() {
   res <- epanet2toolkit::getOpenflag()
   return(res)
