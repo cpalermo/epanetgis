@@ -1,10 +1,18 @@
-#' Check EPANET session
+#' Create a new .inp object
+#'
+#' @description
+#' Returns a new epanet.inp S3 object
+#'
+#' @usage
+#' en_new()
 #'
 #' @examples
-#' en_open()
+#' net <- en_new()
+#' class(net)
+#' # [1] "epanet.inp"
 #'
 #' @export
-en_open <- function() {
-  res <- epanet2toolkit::getOpenflag()
-  return(res)
+en_new <- function() {
+  conn <- system.file("extdata", "new.inp", package = "epanetgis")
+  epanetReader::read.inp(conn)
 }
