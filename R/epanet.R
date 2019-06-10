@@ -57,8 +57,15 @@ nd_data <- function(nodes, type) {
   if (type == "tanks") {df <- colnames_force(df, tan_names)}
 
   for(i in 1:dim(df)[2]) {
-    if(all(is.na(df[, i]))) {df[, i] <- as.logical(df[, i])}
+    if(all(is.na(df[, i]))) {
+      df[, i] <- as.logical(df[, i])
+    } else {
+      if(any(is.na(df[, i]))) {
+        df[, i] <- as.factor(df[, i])
+      }
+    }
   }
 
   return(df)
+
 }
