@@ -17,16 +17,32 @@ en_new <- function() {
   epanetReader::read.inp(conn)
 }
 
-#' Return coordinates form EPANET nodes
+#' Return coordinates from EPANET nodes
 #'
 #' @export
-nd_coordinates <- function(nodes) {
-  if (all(st_geometry_type(x = nodes) == "POINT")) {
-    coordinates <- data.frame(nodes$ID, st_coordinates(nodes), stringsAsFactors = FALSE)
-    names(coordinates) <- c("Node", "X.coord", "Y.coord")
-    return(coordinates)
+nd_coordinates <- function(dsn, node_model) {
+  layer_list <- st_layers(dsn)$name
+  layer_name <- layer_list[grep(nd$layer, layer_list, ignore.case = TRUE)]
+
+  layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
+
+  if (all(st_geometry_type(layer) == "POINT")) {
+    format <- nd$format
+    coordinates <- nd$coordinates
+
+    ID <- eval(parse(text = format$ID))
+    coord_X <- eval(parse(text = coordinates$coord_X))
+    coord_Y <- eval(parse(text = coordinates$coord_Y))
+
+    ## epanetReader
+    Node <- as.character(ID)
+    X.coord <- as.numeric(coord_X)
+    Y.coord <- as.numeric(coord_Y)
+
+    res <- data.frame(Node, X.coord, Y.coord, stringsAsFactors = FALSE)
+    return(res)
   } else {
-    stop("All geometry should be of type POINT")
+    stop("All geometries should be of type POINT")
   }
 }
 

@@ -2,10 +2,10 @@
 % Please edit documentation in R/epanet.R
 \name{nd_coordinates}
 \alias{nd_coordinates}
-\title{Return coordinates form EPANET nodes}
+\title{Return coordinates from EPANET nodes}
 \usage{
-nd_coordinates(nodes)
+nd_coordinates(dsn, node_model)
 }
 \description{
-Return coordinates form EPANET nodes
+Return coordinates from EPANET nodes
 }
