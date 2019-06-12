@@ -4,7 +4,7 @@
 \alias{nd_coordinates}
 \title{Return coordinates from EPANET nodes}
 \usage{
-nd_coordinates(dsn, node_model)
+nd_coordinates(dsn, node, model)
 }
 \description{
 Return coordinates from EPANET nodes

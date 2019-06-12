@@ -17,33 +17,63 @@ en_new <- function() {
   epanetReader::read.inp(conn)
 }
 
-#' Return coordinates from EPANET nodes
+#' Return coordinates from EPANET node
 #'
 #' @export
-nd_coordinates <- function(dsn, node_model) {
+nd_get_coordinates <- function(dsn, node_model) {
   layer_list <- st_layers(dsn)$name
-  layer_name <- layer_list[grep(nd$layer, layer_list, ignore.case = TRUE)]
+  layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
 
   layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
 
-  if (all(st_geometry_type(layer) == "POINT")) {
-    format <- nd$format
-    coordinates <- nd$coordinates
+  if (dim(layer)[1] > 0) {
+    if (all(st_geometry_type(layer) == "POINT")) {
+      format <- node_model$format
+      coordinates <- node_model$coordinates
 
-    ID <- eval(parse(text = format$ID))
-    coord_X <- eval(parse(text = coordinates$coord_X))
-    coord_Y <- eval(parse(text = coordinates$coord_Y))
+      ID <- eval(parse(text = format$ID))
+      coord_X <- eval(parse(text = coordinates$coord_X))
+      coord_Y <- eval(parse(text = coordinates$coord_Y))
 
-    ## epanetReader
-    Node <- as.character(ID)
-    X.coord <- as.numeric(coord_X)
-    Y.coord <- as.numeric(coord_Y)
+      ## epanetReader
+      Node <- as.character(ID)
+      X.coord <- as.numeric(coord_X)
+      Y.coord <- as.numeric(coord_Y)
 
-    res <- data.frame(Node, X.coord, Y.coord, stringsAsFactors = FALSE)
-    return(res)
+      res <- data.frame(Node, X.coord, Y.coord, stringsAsFactors = FALSE)
+      return(res)
+    } else {
+      stop("All geometries should be of type POINT")
+    }
   } else {
-    stop("All geometries should be of type POINT")
+    res <- data.frame()
   }
+}
+
+#' Return coordinates from EPANET nodes
+#'
+#' @export
+nd_coordinates <- function(dsn, node, model) {
+  nd_list <- model[[node]]
+  df <- data.frame()
+  for(i in 1:length(nd_list)) {
+    nd <- nd_list[[i]]
+    df <- rbind(df, nd_get_coordinates(dsn, nd))
+  }
+  return(df)
+}
+
+#' Return EPANET coordinates from all nodes
+#'
+#' @export
+en_coordinates <- function(dsn, model) {
+  jun <- nd_coordinates(dsn, "junctions", model)
+  res <- nd_coordinates(dsn, "reservoirs", model)
+  tan <- nd_coordinates(dsn, "tanks", model)
+
+  df <- rbind(jun, res, tan)
+
+  return(df)
 }
 
 #' Return an EPANET node
