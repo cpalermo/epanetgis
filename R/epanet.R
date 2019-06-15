@@ -28,6 +28,7 @@ nd_get_coordinates <- function(dsn, node_model) {
 
   if (dim(layer)[1] > 0) {
     if (all(st_geometry_type(layer) == "POINT")) {
+      eval(parse(text = node_model$variables))
       format <- node_model$format
       coordinates <- node_model$coordinates
 
@@ -44,6 +45,47 @@ nd_get_coordinates <- function(dsn, node_model) {
       return(res)
     } else {
       stop("All geometries should be of type POINT")
+    }
+  } else {
+    res <- data.frame()
+  }
+}
+
+#' Return vertices from EPANET link
+#'
+#' @export
+ln_get_vertices <- function(dsn, node_model) {
+  layer_list <- st_layers(dsn)$name
+  layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
+
+  layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
+
+  if (dim(layer)[1] > 0) {
+    if (all(st_geometry_type(layer) == "LINESTRING")) {
+      layer_list <- st_layers(dsn)$name
+      layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
+
+      layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
+
+      eval(parse(text = node_model$variables))
+      vertices <- node_model$vertices
+      format <- node_model$format
+
+      line_i <- eval(parse(text = vertices$line_i))
+      ID <- eval(parse(text = format$ID))
+      ID <- ID[line_i]
+      coord_X <- eval(parse(text = vertices$coord_X))
+      coord_Y <- eval(parse(text = vertices$coord_Y))
+
+      ## epanetReader
+      Node <- as.character(ID)
+      X.coord <- as.numeric(coord_X)
+      Y.coord <- as.numeric(coord_Y)
+
+      res <- data.frame(Node, X.coord, Y.coord, stringsAsFactors = FALSE)
+      return(res)
+    } else {
+      stop("All geometries should be of type LINESTRING")
     }
   } else {
     res <- data.frame()
