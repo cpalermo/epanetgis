@@ -105,6 +105,20 @@ nd_coordinates <- function(dsn, node, model) {
   return(df)
 }
 
+#' Return vertices from EPANET links
+#'
+#' @export
+ln_vertices <- function(dsn, link, model) {
+  ln_list <- model[[link]]
+
+  df <- data.frame()
+  for(i in 1:length(ln_list)) {
+    ln <- ln_list[[i]]
+    df <- rbind(df, ln_get_vertices(dsn, ln))
+  }
+  return(df)
+}
+
 #' Return EPANET coordinates from all nodes
 #'
 #' @export
