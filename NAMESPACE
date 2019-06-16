@@ -2,6 +2,7 @@
 
 export(en_coordinates)
 export(en_new)
+export(en_vertices)
 export(ln_get_vertices)
 export(ln_vertices)
 export(nd_coordinates)

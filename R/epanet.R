@@ -62,11 +62,6 @@ ln_get_vertices <- function(dsn, node_model) {
 
   if (dim(layer)[1] > 0) {
     if (all(st_geometry_type(layer) == "LINESTRING")) {
-      layer_list <- st_layers(dsn)$name
-      layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
-
-      layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
-
       eval(parse(text = node_model$variables))
       vertices <- node_model$vertices
       format <- node_model$format
@@ -78,7 +73,7 @@ ln_get_vertices <- function(dsn, node_model) {
       coord_Y <- eval(parse(text = vertices$coord_Y))
 
       ## epanetReader
-      Node <- as.character(ID)
+      ID <- as.character(ID)
       X.coord <- as.numeric(coord_X)
       Y.coord <- as.numeric(coord_Y)
 
@@ -110,7 +105,6 @@ nd_coordinates <- function(dsn, node, model) {
 #' @export
 ln_vertices <- function(dsn, link, model) {
   ln_list <- model[[link]]
-
   df <- data.frame()
   for(i in 1:length(ln_list)) {
     ln <- ln_list[[i]]
@@ -128,6 +122,19 @@ en_coordinates <- function(dsn, model) {
   tan <- nd_coordinates(dsn, "tanks", model)
 
   df <- rbind(jun, res, tan)
+
+  return(df)
+}
+
+#' Return EPANET vertices from all links
+#'
+#' @export
+en_vertices <- function(dsn, model) {
+  pip <- ln_vertices(dsn, "pipes", model)
+  pum <- ln_vertices(dsn, "pumps", model)
+  val <- ln_vertices(dsn, "valves", model)
+
+  df <- rbind(pip, pum, val)
 
   return(df)
 }
