@@ -77,7 +77,7 @@ ln_get_vertices <- function(dsn, node_model) {
       X.coord <- as.numeric(coord_X)
       Y.coord <- as.numeric(coord_Y)
 
-      res <- data.frame(Node, X.coord, Y.coord, stringsAsFactors = FALSE)
+      res <- data.frame(ID, X.coord, Y.coord, stringsAsFactors = FALSE)
       return(res)
     } else {
       stop("All geometries should be of type LINESTRING")

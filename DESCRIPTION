@@ -7,7 +7,7 @@ Maintainer: Carlo Palermo <carlo.palermo@hdati.com>
 Description: A collection of functions to write EPANET .inp files
     from different GIS sources.
 Depends:
-    R (>= 3.4.0),
+    R (>= 3.3.0),
     sf
 Imports:
     epanetReader,
