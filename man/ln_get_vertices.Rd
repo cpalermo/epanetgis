@@ -4,7 +4,7 @@
 \alias{ln_get_vertices}
 \title{Return vertices from EPANET link}
 \usage{
-ln_get_vertices(dsn, node_model)
+ln_get_vertices(dsn, link_model, model)
 }
 \description{
 Return vertices from EPANET link

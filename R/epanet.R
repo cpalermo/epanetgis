@@ -21,10 +21,15 @@ en_new <- function() {
 #'
 #' @export
 nd_get_coordinates <- function(dsn, node_model) {
-  layer_list <- st_layers(dsn)$name
-  layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
 
-  layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
+  if (!is.null(node_model$layer)) {
+    layer_list <- st_layers(dsn)$name
+    layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
+
+    layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
+  } else {
+    layer <- data.frame()
+  }
 
   if (dim(layer)[1] > 0) {
     if (all(st_geometry_type(layer) == "POINT")) {
@@ -54,17 +59,24 @@ nd_get_coordinates <- function(dsn, node_model) {
 #' Return vertices from EPANET link
 #'
 #' @export
-ln_get_vertices <- function(dsn, node_model) {
-  layer_list <- st_layers(dsn)$name
-  layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
+ln_get_vertices <- function(dsn, link_model, model) {
 
-  layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
+  if (!is.null(link_model$layer)) {
+    layer_list <- st_layers(dsn)$name
+    layer_name <- layer_list[grep(link_model$layer, layer_list, ignore.case = TRUE)]
+
+    layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
+    layer <- multi2linestring(layer)
+    nodes <- en_coordinates(dsn, model)
+  } else {
+    layer <- data.frame()
+  }
 
   if (dim(layer)[1] > 0) {
     if (all(st_geometry_type(layer) == "LINESTRING")) {
-      eval(parse(text = node_model$variables))
-      vertices <- node_model$vertices
-      format <- node_model$format
+      eval(parse(text = link_model$variables))
+      vertices <- link_model$vertices
+      format <- link_model$format
 
       line_i <- eval(parse(text = vertices$line_i))
       ID <- eval(parse(text = format$ID))
@@ -84,6 +96,7 @@ ln_get_vertices <- function(dsn, node_model) {
     }
   } else {
     res <- data.frame()
+    return(res)
   }
 }
 
@@ -108,7 +121,7 @@ ln_vertices <- function(dsn, link, model) {
   df <- data.frame()
   for(i in 1:length(ln_list)) {
     ln <- ln_list[[i]]
-    df <- rbind(df, ln_get_vertices(dsn, ln))
+    df <- rbind(df, ln_get_vertices(dsn, ln, model))
   }
   return(df)
 }
