@@ -152,6 +152,163 @@ en_vertices <- function(dsn, model) {
   return(df)
 }
 
+#' Return EPANET [JUNCTIONS]
+#'
+#' @export
+nd_get_junctions <- function(dsn, node_model) {
+  if (!is.null(node_model$layer)) {
+    layer_list <- st_layers(dsn)$name
+    layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
+
+    layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
+  } else {
+    layer <- data.frame()
+  }
+
+  if (dim(layer)[1] > 0) {
+    if (all(st_geometry_type(layer) == "POINT")) {
+      eval(parse(text = node_model$variables))
+      format <- node_model$format
+      coordinates <- node_model$coordinates
+
+      ID <- eval(parse(text = format$ID))
+      elevation <- eval(parse(text = format$elevation))
+      demand_flow <- eval(parse(text = format$demand_flow))
+
+      ## epanetReader
+      ID <- as.character(ID)
+      Elevation <- as.numeric(elevation)
+      Demand <- as.numeric(demand_flow)
+
+      res <- data.frame(ID,
+                        Elevation,
+                        Demand,
+                        stringsAsFactors = FALSE)
+
+      ## TODO:
+      res[is.na(res)] <- -1
+
+      return(res)
+    } else {
+      stop("All geometries should be of type POINT")
+    }
+  } else {
+    res <- data.frame()
+  }
+}
+
+#' Return EPANET [RESERVOIRS]
+#'
+#' @export
+nd_get_reservoirs <- function(dsn, node_model) {
+  if (!is.null(node_model$layer)) {
+    layer_list <- st_layers(dsn)$name
+    layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
+
+    layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
+  } else {
+    layer <- data.frame()
+  }
+
+  if (dim(layer)[1] > 0) {
+    if (all(st_geometry_type(layer) == "POINT")) {
+      eval(parse(text = node_model$variables))
+      format <- node_model$format
+      coordinates <- node_model$coordinates
+
+      ID <- eval(parse(text = format$ID))
+      head <- eval(parse(text = format$head))
+
+      ## epanetReader
+      ID <- as.character(ID)
+      Head <- as.numeric(head)
+
+      res <- data.frame(ID,
+                        Head,
+                        stringsAsFactors = FALSE)
+      ## TODO:
+      res[is.na(res)] <- -1
+
+      return(res)
+    } else {
+      stop("All geometries should be of type POINT")
+    }
+  } else {
+    res <- data.frame()
+  }
+}
+
+#' Return EPANET [TANKS]
+#'
+#' @export
+nd_get_tanks <- function(dsn, node_model) {
+  if (!is.null(node_model$layer)) {
+    layer_list <- st_layers(dsn)$name
+    layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
+
+    layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
+  } else {
+    layer <- data.frame()
+  }
+
+  if (dim(layer)[1] > 0) {
+    if (all(st_geometry_type(layer) == "POINT")) {
+      eval(parse(text = node_model$variables))
+      format <- node_model$format
+      coordinates <- node_model$coordinates
+
+      ID <- eval(parse(text = format$ID))
+      elevation <- eval(parse(text = format$elevation))
+      initial_level <- eval(parse(text = format$initial_level))
+      minimum_level <- eval(parse(text = format$minimum_level))
+      maximum_level <- eval(parse(text = format$maximum_level))
+      diameter <- eval(parse(text = format$diameter))
+      minimum_volume <- eval(parse(text = format$minimum_volume))
+
+      ## epanetReader
+      ID <- as.character(ID)
+      Elevation <- elevation
+      InitLevel <- initial_level
+      MinLevel <- minimum_level
+      MaxLevel <- maximum_level
+      Diameter <- diameter
+      MinVol <- minimum_volume
+
+      res <- data.frame(ID,
+                        Elevation,
+                        InitLevel,
+                        MinLevel,
+                        MaxLevel,
+                        Diameter,
+                        MinVol,
+                        stringsAsFactors = FALSE)
+      ## TODO:
+      res[is.na(res)] <- -1
+
+      return(res)
+    } else {
+      stop("All geometries should be of type POINT")
+    }
+  } else {
+    res <- data.frame()
+  }
+}
+
+#' Return EPANET nodes
+#'
+#' @export
+nd_nodes <- function(dsn, node, model) {
+  nd_list <- model[[node]]
+  df <- data.frame()
+  for(i in 1:length(nd_list)) {
+    nd <- nd_list[[i]]
+    if(node == "junctions") {df <- rbind(df, nd_get_junctions(dsn, nd))}
+    if(node == "reservoirs") {df <- rbind(df, nd_get_reservoirs(dsn, nd))}
+    if(node == "tanks") {df <- rbind(df, nd_get_tanks(dsn, nd))}
+  }
+  return(df)
+}
+
 #' Return an EPANET node
 #'
 #' @export
