@@ -310,7 +310,179 @@ nd_nodes <- function(dsn, node, model) {
   return(df)
 }
 
-#' Return an EPANET node
+####
+
+
+#' Return EPANET [PIPES]
+#'
+#' @export
+ln_get_pipes <- function(dsn, link_model, model) {
+  if (!is.null(link_model$layer)) {
+    layer_list <- st_layers(dsn)$name
+    layer_name <- layer_list[grep(link_model$layer, layer_list, ignore.case = TRUE)]
+
+    layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
+    nodes <- en_coordinates(dsn, model)
+  } else {
+    layer <- data.frame()
+  }
+
+  if (dim(layer)[1] > 0) {
+    layer <- multi2linestring(layer)
+
+    if (all(st_geometry_type(layer) == "LINESTRING")) {
+      eval(parse(text = link_model$variables))
+      vertices <- link_model$vertices
+      format <- link_model$format
+
+      ## [PIPES] specific
+      ID <- eval(parse(text = format$ID))
+      start_node_ID <- eval(parse(text = format$start_node_ID))
+      end_node_ID <- eval(parse(text = format$end_node_ID))
+      length <- eval(parse(text = format$length))
+      diameter <- eval(parse(text = format$diameter))
+      roughness <- eval(parse(text = format$roughness))
+      ## epanetReader
+      ID <- as.character(ID)
+      Node1 <- as.character(start_node_ID)
+      Node2 <- as.character(end_node_ID)
+      Length <- as.numeric(length)
+      Diameter <- as.numeric(diameter)
+      Roughness <- as.numeric(roughness)
+      res <- data.frame(ID,
+                        Node1,
+                        Node2,
+                        Length,
+                        Diameter,
+                        Roughness,
+                        stringsAsFactors = FALSE)
+      ## end [PIPES] specific
+
+      return(res)
+    } else {
+      stop("All geometries should be of type LINESTRING")
+    }
+  } else {
+    res <- data.frame()
+    return(res)
+  }
+}
+
+#' Return EPANET [PUMPS]
+#'
+#' @export
+ln_get_pumps <- function(dsn, link_model, model) {
+  if (!is.null(link_model$layer)) {
+    layer_list <- st_layers(dsn)$name
+    layer_name <- layer_list[grep(link_model$layer, layer_list, ignore.case = TRUE)]
+
+    layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
+    nodes <- en_coordinates(dsn, model)
+  } else {
+    layer <- data.frame()
+  }
+
+  if (dim(layer)[1] > 0) {
+    layer <- multi2linestring(layer)
+
+    if (all(st_geometry_type(layer) == "LINESTRING")) {
+      eval(parse(text = link_model$variables))
+      vertices <- link_model$vertices
+      format <- link_model$format
+
+      ## [PUMPS] specific
+      ID <- eval(parse(text = format$ID))
+      start_node_ID <- eval(parse(text = format$start_node_ID))
+      end_node_ID <- eval(parse(text = format$end_node_ID))
+      ## properties
+      ##
+      ## epanetReader
+      ID <- as.character(ID)
+      Node1 <- as.character(start_node_ID)
+      Node2 <- as.character(end_node_ID)
+      res <- data.frame(ID,
+                        Node1,
+                        Node2,
+                        stringsAsFactors = FALSE)
+      ## end [PUMPS] specific
+
+      return(res)
+    } else {
+      stop("All geometries should be of type LINESTRING")
+    }
+  } else {
+    res <- data.frame()
+    return(res)
+  }
+}
+
+#' Return EPANET [VALVES]
+#'
+#' @export
+ln_get_valves <- function(dsn, link_model, model) {
+  if (!is.null(link_model$layer)) {
+    layer_list <- st_layers(dsn)$name
+    layer_name <- layer_list[grep(link_model$layer, layer_list, ignore.case = TRUE)]
+
+    layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
+    nodes <- en_coordinates(dsn, model)
+  } else {
+    layer <- data.frame()
+  }
+
+  if (dim(layer)[1] > 0) {
+    layer <- multi2linestring(layer)
+
+    if (all(st_geometry_type(layer) == "LINESTRING")) {
+      eval(parse(text = link_model$variables))
+      vertices <- link_model$vertices
+      format <- link_model$format
+
+      ## [VALVES] specific
+      ID <- eval(parse(text = format$ID))
+      start_node_ID <- eval(parse(text = format$start_node_ID))
+      end_node_ID <- eval(parse(text = format$end_node_ID))
+      ## diameter
+      ## type
+      ## setting
+      ## minor_loss
+      ##
+      ## epanetReader
+      ID <- as.character(ID)
+      Node1 <- as.character(start_node_ID)
+      Node2 <- as.character(end_node_ID)
+      res <- data.frame(ID,
+                        Node1,
+                        Node2,
+                        stringsAsFactors = FALSE)
+      ## end [VALVES] specific
+
+      return(res)
+    } else {
+      stop("All geometries should be of type LINESTRING")
+    }
+  } else {
+    res <- data.frame()
+    return(res)
+  }
+}
+
+#' Return EPANET links
+#'
+#' @export
+ln_links <- function(dsn, link, model) {
+  ln_list <- model[[link]]
+  df <- data.frame()
+  for(i in 1:length(ln_list)) {
+    ln <- ln_list[[i]]
+    if(link == "pipes") {df <- rbind(df, ln_get_pipes(dsn, ln, model))}
+    if(link == "pumps") {df <- rbind(df, ln_get_pumps(dsn, ln, model))}
+    if(link == "valves") {df <- rbind(df, ln_get_valves(dsn, ln, model))}
+  }
+  return(df)
+}
+
+#' Return EPANET node data
 #'
 #' @export
 nd_data <- function(nodes, type) {
@@ -345,7 +517,5 @@ nd_data <- function(nodes, type) {
       }
     }
   }
-
   return(df)
-
 }
