@@ -66,13 +66,14 @@ ln_get_vertices <- function(dsn, link_model, model) {
     layer_name <- layer_list[grep(link_model$layer, layer_list, ignore.case = TRUE)]
 
     layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
-    layer <- multi2linestring(layer)
     nodes <- en_coordinates(dsn, model)
   } else {
     layer <- data.frame()
   }
 
   if (dim(layer)[1] > 0) {
+    layer <- multi2linestring(layer)
+
     if (all(st_geometry_type(layer) == "LINESTRING")) {
       eval(parse(text = link_model$variables))
       vertices <- link_model$vertices
