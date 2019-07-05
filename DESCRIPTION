@@ -11,7 +11,8 @@ Depends:
     sf
 Imports:
     epanetReader,
-    epanet2toolkit
+    epanet2toolkit,
+    yaml
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
