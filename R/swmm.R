@@ -173,13 +173,16 @@ sw_get_outfalls <- function(dsn, node_model) {
 
       ID <- eval(parse(text = format$ID))
       invert_elevation <- eval(parse(text = format$invert_elevation))
+      outfall_type <- eval(parse(text = format$outfall_type))
 
       ## epanetReader
       ID <- as.character(ID)
       Elevation <- as.numeric(invert_elevation)
+      Type <- as.character(outfall_type)
 
       res <- data.frame(ID,
                         Elevation,
+                        Type,
                         stringsAsFactors = FALSE)
 
       ## TODO:
