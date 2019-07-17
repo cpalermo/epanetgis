@@ -22,9 +22,8 @@ sw_new <- function() {
 #' @export
 sw_coordinates <- function(dsn, model) {
   jun <- nd_coordinates(dsn, "junctions", model)
-
-  df <- rbind(jun)
-
+  out <- nd_coordinates(dsn, "outfalls", model)
+  df <- rbind(jun, out)
   return(df)
 }
 

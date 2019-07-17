@@ -2,10 +2,10 @@
 % Please edit documentation in R/swmm.R
 \name{sw_get_conduits}
 \alias{sw_get_conduits}
-\title{Return EPANET [PIPES]}
+\title{Return SWMM [CONDUITS]}
 \usage{
 sw_get_conduits(dsn, link_model, model)
 }
 \description{
-Return EPANET [PIPES]
+Return SWMM [CONDUITS]
 }
