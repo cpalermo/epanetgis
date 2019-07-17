@@ -119,18 +119,72 @@ sw_get_junctions <- function(dsn, node_model) {
       coordinates <- node_model$coordinates
 
       ID <- eval(parse(text = format$ID))
-      elevation <- eval(parse(text = format$elevation))
+      invert_elevation <- eval(parse(text = format$invert_elevation))
+      max_depth <- eval(parse(text = format$max_depth))
+      init_depth <- eval(parse(text = format$init_depth))
+      surcharge_depth <- eval(parse(text = format$surcharge_depth))
+      ponded_area <- eval(parse(text = format$ponded_area))
 
       ## epanetReader
       ID <- as.character(ID)
-      Elevation <- as.numeric(elevation)
+      Elevation <- as.numeric(invert_elevation)
+      Demand <- as.numeric(max_depth)
+      Pattern <- as.numeric(init_depth)
+      Surcharge <- as.numeric(surcharge_depth)
+      Area <- as.numeric(ponded_area)
+
+      res <- data.frame(ID,
+                        Elevation,
+                        Demand,
+                        Pattern,
+                        Surcharge,
+                        Area,
+                        stringsAsFactors = FALSE)
+
+      ## TODO:
+      res[is.na(res)] <- 0
+
+      return(res)
+    } else {
+      stop("All geometries should be of type POINT")
+    }
+  } else {
+    res <- data.frame()
+  }
+}
+
+#' Return SWMM [OUTFALLS]
+#'
+#' @export
+sw_get_outfalls <- function(dsn, node_model) {
+  if (!is.null(node_model$layer)) {
+    layer_list <- st_layers(dsn)$name
+    layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
+
+    layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
+  } else {
+    layer <- data.frame()
+  }
+
+  if (dim(layer)[1] > 0) {
+    if (all(st_geometry_type(layer) == "POINT")) {
+      eval(parse(text = node_model$variables))
+      format <- node_model$format
+      coordinates <- node_model$coordinates
+
+      ID <- eval(parse(text = format$ID))
+      invert_elevation <- eval(parse(text = format$invert_elevation))
+
+      ## epanetReader
+      ID <- as.character(ID)
+      Elevation <- as.numeric(invert_elevation)
 
       res <- data.frame(ID,
                         Elevation,
                         stringsAsFactors = FALSE)
 
       ## TODO:
-      res[is.na(res)] <- -1
+      res[is.na(res)] <- 0
 
       return(res)
     } else {
@@ -150,11 +204,14 @@ sw_nodes <- function(dsn, node, model) {
   for(i in 1:length(nd_list)) {
     nd <- nd_list[[i]]
     if(node == "junctions") {df <- rbind(df, sw_get_junctions(dsn, nd))}
+    if(node == "outfalls") {df <- rbind(df, sw_get_outfalls(dsn, nd))}
   }
   return(df)
 }
 
-#' Return EPANET [PIPES]
+
+
+#' Return SWMM [CONDUITS]
 #'
 #' @export
 sw_get_conduits <- function(dsn, link_model, model) {
