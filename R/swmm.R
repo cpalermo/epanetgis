@@ -260,7 +260,10 @@ sw_get_conduits <- function(dsn, link_model, model) {
                         InletOffset,
                         OutletOffset,
                         stringsAsFactors = FALSE)
-      ## end [PIPES] specific
+      ## end [CONDUITS] specific
+
+      ## TODO:
+      res[is.na(res)] <- 0
 
       return(res)
     } else {
