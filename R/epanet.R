@@ -185,9 +185,7 @@ nd_get_junctions <- function(dsn, node_model) {
                         Elevation,
                         Demand,
                         stringsAsFactors = FALSE)
-
-      ## TODO:
-      res[is.na(res)] <- -1
+      res[is.na(res)] <- 0
 
       return(res)
     } else {
@@ -227,8 +225,7 @@ nd_get_reservoirs <- function(dsn, node_model) {
       res <- data.frame(ID,
                         Head,
                         stringsAsFactors = FALSE)
-      ## TODO:
-      res[is.na(res)] <- -1
+      res[is.na(res)] <- 0
 
       return(res)
     } else {
@@ -283,8 +280,7 @@ nd_get_tanks <- function(dsn, node_model) {
                         Diameter,
                         MinVol,
                         stringsAsFactors = FALSE)
-      ## TODO:
-      res[is.na(res)] <- -1
+      res[is.na(res)] <- 0
 
       return(res)
     } else {
