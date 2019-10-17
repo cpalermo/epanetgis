@@ -1,7 +1,7 @@
 Package: epanetgis
 Type: Package
 Title: Connect GIS to EPANET
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Author: Carlo Palermo <carlo.palermo@hdati.com>
 Maintainer: Carlo Palermo <carlo.palermo@hdati.com>
 Description: A collection of functions to write EPANET .inp files
