@@ -211,8 +211,6 @@ sw_nodes <- function(dsn, node, model) {
   return(df)
 }
 
-
-
 #' Return SWMM [CONDUITS]
 #'
 #' @export

@@ -8,11 +8,13 @@ Description: A collection of functions to write EPANET .inp files
     from different GIS sources.
 Depends:
     R (>= 3.3.0),
-    sf
+    sf,
+    lwgeom
 Imports:
     epanetReader,
     epanet2toolkit,
-    yaml
+    yaml,
+    devtools
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
