@@ -2,10 +2,10 @@
 % Please edit documentation in R/utils.R
 \name{multi2linestring}
 \alias{multi2linestring}
-\title{Force MULTILINESTRING in LINESTRING}
+\title{Force MULTILINESTRING to LINESTRING}
 \usage{
 multi2linestring(layer)
 }
 \description{
-Force MULTILINESTRING in LINESTRING
+Force MULTILINESTRING to LINESTRING
 }

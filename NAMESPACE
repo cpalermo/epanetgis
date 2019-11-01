@@ -3,6 +3,7 @@
 export(en_coordinates)
 export(en_new)
 export(en_vertices)
+export(get_layer)
 export(ln_get_pipes)
 export(ln_get_pumps)
 export(ln_get_valves)
