@@ -24,7 +24,8 @@ nd_get_coordinates <- function(dsn, node_model) {
 
   if (!is.null(node_model$layer)) {
     layer_list <- st_layers(dsn)$name
-    layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
+    layer_name <- node_model$layer
+    #layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
 
     layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
   } else {
@@ -63,7 +64,8 @@ ln_get_vertices <- function(dsn, link_model, model) {
 
   if (!is.null(link_model$layer)) {
     layer_list <- st_layers(dsn)$name
-    layer_name <- layer_list[grep(link_model$layer, layer_list, ignore.case = TRUE)]
+    layer_name <- link_model$layer
+    #layer_name <- layer_list[grep(link_model$layer, layer_list, ignore.case = TRUE)]
 
     layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
     nodes <- en_coordinates(dsn, model)
@@ -159,7 +161,8 @@ en_vertices <- function(dsn, model) {
 nd_get_junctions <- function(dsn, node_model) {
   if (!is.null(node_model$layer)) {
     layer_list <- st_layers(dsn)$name
-    layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
+    layer_name <- node_model$layer
+    #layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
 
     layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
   } else {
@@ -202,7 +205,8 @@ nd_get_junctions <- function(dsn, node_model) {
 nd_get_reservoirs <- function(dsn, node_model) {
   if (!is.null(node_model$layer)) {
     layer_list <- st_layers(dsn)$name
-    layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
+    layer_name <- node_model$layer
+    #layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
 
     layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
   } else {
@@ -242,7 +246,8 @@ nd_get_reservoirs <- function(dsn, node_model) {
 nd_get_tanks <- function(dsn, node_model) {
   if (!is.null(node_model$layer)) {
     layer_list <- st_layers(dsn)$name
-    layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
+    layer_name <- node_model$layer
+    #layer_name <- layer_list[grep(node_model$layer, layer_list, ignore.case = TRUE)]
 
     layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
   } else {
@@ -315,7 +320,8 @@ nd_nodes <- function(dsn, node, model) {
 ln_get_pipes <- function(dsn, link_model, model) {
   if (!is.null(link_model$layer)) {
     layer_list <- st_layers(dsn)$name
-    layer_name <- layer_list[grep(link_model$layer, layer_list, ignore.case = TRUE)]
+    layer_name <- link_model$layer
+    #layer_name <- layer_list[grep(link_model$layer, layer_list, ignore.case = TRUE)]
 
     layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
     nodes <- en_coordinates(dsn, model)
@@ -370,7 +376,8 @@ ln_get_pipes <- function(dsn, link_model, model) {
 ln_get_pumps <- function(dsn, link_model, model) {
   if (!is.null(link_model$layer)) {
     layer_list <- st_layers(dsn)$name
-    layer_name <- layer_list[grep(link_model$layer, layer_list, ignore.case = TRUE)]
+    layer_name <- link_model$layer
+    #layer_name <- layer_list[grep(link_model$layer, layer_list, ignore.case = TRUE)]
 
     layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
     nodes <- en_coordinates(dsn, model)
@@ -418,7 +425,8 @@ ln_get_pumps <- function(dsn, link_model, model) {
 ln_get_valves <- function(dsn, link_model, model) {
   if (!is.null(link_model$layer)) {
     layer_list <- st_layers(dsn)$name
-    layer_name <- layer_list[grep(link_model$layer, layer_list, ignore.case = TRUE)]
+    layer_name <- link_model$layer
+    #layer_name <- layer_list[grep(link_model$layer, layer_list, ignore.case = TRUE)]
 
     layer <- st_read(dsn, layer_name, quiet = TRUE, stringsAsFactors = FALSE)
     nodes <- en_coordinates(dsn, model)
