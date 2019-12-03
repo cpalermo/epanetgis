@@ -11,6 +11,7 @@ colnames_force <- function(df, col_names) {
 #'
 #' @export
 get_layer <- function(dsn, layer, crs) {
+  #crs <- st_crs('crs')
   ll <- sf::st_read(dsn, layer)
   ll <- sf::st_zm(ll)
   ll <- sf::st_transform(ll, crs= crs)
