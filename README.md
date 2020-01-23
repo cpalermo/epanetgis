@@ -2,5 +2,5 @@
 
 To install:
 
-devtools::install_github("cpalermo\epanetgis")
+devtools::install_github("cpalermo/epanetgis")
 
