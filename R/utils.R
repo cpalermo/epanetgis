@@ -73,9 +73,9 @@ sample_split_point <- function(point_near, link_near, min_dist) {
 #'
 #' @export
 sample_split_link <- function(point_split, link_near) {
-  link_snap <- st_snap(link_near, point_split, tol=1e-9)
-  link_split <- st_split(link_snap, point_split)
-  link_split <- st_cast(st_geometry(link_split), do_split=TRUE)
+  link_snap <- sf::st_snap(link_near, point_split, tol=1e-9)
+  link_split <- lwgeom::st_split(link_snap, point_split)
+  link_split <- sf::st_cast(st_geometry(link_split), do_split=TRUE)
   return(link_split)
 }
 
