@@ -29,6 +29,8 @@ multi2linestring <- function(layer) {
       gg <- st_geometry(df)
       ls <- st_cast(gg, "LINESTRING")
       if( length(ls) > 2 ) {
+        print(df)
+        print("Please convert manually MULTILINESTRING to LINESTRING")
         stop("Can handle MULTILINESTRING with length =< 2")
       } else {
         if( length(ls) > 1 ) {
